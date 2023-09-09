@@ -31,6 +31,15 @@ const keyboard = {
         this.elements.main.appendChild(this.elements.keysContainer);
         document.body.appendChild(this.elements.main);
 
+        //use keyboard on the target text area
+        document.querySelectorAll(".use-keyboard-input").forEach( (element) => {
+            element.addEventListener("focus", () => {
+                this.open(element.value, currentValue => {
+                    element.value = currentValue;
+                })
+            })
+        });
+
     },
 
     _createKeys() {
@@ -152,18 +161,15 @@ const keyboard = {
     },
 
     close() {
-
+        this.properties.value = "";
+        this.eventHandlers.oninput = oninput;
+        this.eventHandlers.onclose = onclose;
+        this.elements.main.classList.add("keyboard--hidden");
     },
     
 };
 
 window.addEventListener("DOMContentLoaded", () => {
     keyboard.init();
-    keyboard.open("Orlando Rios", 
-    (currentValue) => {
-        console.log("value changed " + currentValue);
-    }, 
-    (currentValue) => {
-        console.log("keyboard closed finishing value = " + currentValue);
-    });
+    
 })
